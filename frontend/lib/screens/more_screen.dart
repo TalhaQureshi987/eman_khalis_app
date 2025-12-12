@@ -338,7 +338,7 @@ class MoreScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        const YouTubeVideosScreen(),
+                                         VideoListScreen(),
                                   ),
                                 );
                               },

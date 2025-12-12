@@ -28,7 +28,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final List<Widget> _screens = [
     const QuranScreen(),
     const HadeesScreen(),
-    const YouTubeVideosScreen(),
+     VideoListScreen(),
     const QAScreen(),
     const MoreScreen(),
   ];

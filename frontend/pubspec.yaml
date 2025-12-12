@@ -44,6 +44,7 @@ dependencies:
   # Prayer times and location
   geolocator: ^10.1.0
   geocoding: ^2.1.1
+  http: ^1.6.0
 
   # State management
   provider: ^6.1.1
@@ -53,6 +54,9 @@ dependencies:
 
   # Icons
   font_awesome_flutter: ^10.6.0
+
+  youtube_player_flutter: ^9.1.3
+
 
 dev_dependencies:
   flutter_test:

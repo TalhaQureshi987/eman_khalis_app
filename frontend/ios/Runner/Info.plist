@@ -24,6 +24,23 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+	<!-- ===== ADD THESE LINES FOR YOUTUBE PLAYER ===== -->
+        <key>NSAppTransportSecurity</key>
+        <dict>
+            <key>NSAllowsArbitraryLoads</key>
+            <true/>
+        </dict>
+
+        <!-- Also add these for YouTube player compatibility -->
+        <key>io.flutter.embedded_views_preview</key>
+        <true/>
+
+        <key>UIBackgroundModes</key>
+        <array>
+            <string>audio</string>
+        </array>
+
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

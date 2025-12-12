@@ -1,73 +1,23 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class YouTubeVideosScreen extends StatefulWidget {
-  const YouTubeVideosScreen({super.key});
 
+
+class VideoListScreen extends StatefulWidget {
   @override
-  State<YouTubeVideosScreen> createState() => _YouTubeVideosScreenState();
+  _VideoListScreenState createState() => _VideoListScreenState();
 }
 
-class _YouTubeVideosScreenState extends State<YouTubeVideosScreen>
+class _VideoListScreenState extends State<VideoListScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
-  final List<Map<String, dynamic>> _videos = [
-    {
-      'title': 'Surah Aal-e-Imran Verses 156-171 Recitation & Translation',
-      'thumbnail': 'assets/images/video1.jpg', // Placeholder
-      'duration': '12:21',
-      'views': '289',
-      'timeAgo': '5 days ago',
-      'channel': 'Eman e Khalis',
-    },
-    {
-      'title': 'Surah At-Tawbah Rukoo 8 | Quran Translation and Recitation',
-      'thumbnail': 'assets/images/video2.jpg',
-      'duration': '16:10',
-      'views': '227',
-      'timeAgo': '6 days ago',
-      'channel': 'Eman e Khalis',
-    },
-    {
-      'title': 'Aay Eman Walo! Eman le Aao',
-      'thumbnail': 'assets/images/video3.jpg',
-      'duration': '20:57',
-      'views': '692',
-      'timeAgo': '10 days ago',
-      'channel': 'Eman e Khalis',
-    },
-    {
-      'title': 'Surah Aal-e-Imran Verses 149-155 with Recitation & Translation',
-      'thumbnail': 'assets/images/video4.jpg',
-      'duration': '8:18',
-      'views': '200',
-      'timeAgo': '12 days ago',
-      'channel': 'Eman e Khalis',
-    },
-    {
-      'title': 'Surah At-Tawbah Rukoo 7 Part 2 | Quran Translation and Recitation',
-      'thumbnail': 'assets/images/video5.jpg',
-      'duration': '13:16',
-      'views': '1.8K',
-      'timeAgo': '13 days ago',
-      'channel': 'Eman e Khalis',
-    },
-    {
-      'title': 'Ab Bhi Waqt Hay, Allah ki Taraf Rujoo Kerlo',
-      'thumbnail': 'assets/images/video6.jpg',
-      'duration': '52:02',
-      'views': '938',
-      'timeAgo': '2 weeks ago',
-      'channel': 'Eman e Khalis',
-    },
-  ];
-
-  final List<String> _tabs = ['Home', 'Videos', 'Shorts', 'Playlists'];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _tabs.length, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -79,227 +29,217 @@ class _YouTubeVideosScreenState extends State<YouTubeVideosScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: const Text(
-          'Eman e Khalis',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF212121),
-          ),
-        ),
-        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        title: Text('Eman e Khalis',style: TextStyle(color: Colors.black),),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.cast,
-              color: Color(0xFF212121),
-              size: 22,
-            ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.search,
-              color: Color(0xFF212121),
-              size: 22,
-            ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.more_vert,
-              color: Color(0xFF212121),
-              size: 22,
-            ),
-          ),
+          IconButton(onPressed: (){}, icon: Icon(Icons.search,color: Colors.black,))
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(48),
-          child: Container(
-            color: Colors.white,
-            child: TabBar(
-              controller: _tabController,
-              indicatorColor: const Color(0xFF2196F3),
-              indicatorWeight: 3,
-              labelColor: const Color(0xFF2196F3),
-              unselectedLabelColor: const Color(0xFF757575),
-              labelStyle: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-              unselectedLabelStyle: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-              ),
-              tabs: _tabs.map((tab) => Tab(text: tab)).toList(),
-            ),
-          ),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: [
+            Tab(text: 'Videos'),
+            Tab(text: 'Audios'),
+            Tab(text: 'Books'),
+            Tab(text: 'Hablullah'),
+          ],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
         children: [
-          _buildVideoList(),
-          _buildVideoList(),
-          _buildShortsList(),
-          _buildPlaylistsList(),
+          VideosTab(), // Your YouTube videos list
+          AudiosTab(), // Audio tab
+          BooksTab(),  // Books tab
+          HablullahTab(), // Special content
         ],
-      ),
-    );
-  }
-
-  Widget _buildVideoList() {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      itemCount: _videos.length,
-      itemBuilder: (context, index) {
-        final video = _videos[index];
-        return _buildVideoCard(video);
-      },
-    );
-  }
-
-  Widget _buildVideoCard(Map<String, dynamic> video) {
-    return InkWell(
-      onTap: () {
-        // Handle video tap - navigate to video player
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Thumbnail
-            Stack(
-              children: [
-                Container(
-                  width: 160,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE0E0E0),
-                    borderRadius: BorderRadius.circular(8),
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        const Color(0xFF2196F3).withOpacity(0.3),
-                        const Color(0xFF2196F3).withOpacity(0.1),
-                      ],
-                    ),
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.play_circle_outline,
-                      size: 48,
-                      color: Color(0xFF2196F3),
-                    ),
-                  ),
-                ),
-                // Duration overlay
-                Positioned(
-                  bottom: 6,
-                  right: 6,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 6,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      video['duration'],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(width: 12),
-            // Video info
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    video['title'],
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF212121),
-                      height: 1.3,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    video['channel'],
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF757575),
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    '${video['views']} views · ${video['timeAgo']}',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF757575),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.more_vert,
-                color: Color(0xFF757575),
-                size: 20,
-              ),
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildShortsList() {
-    return const Center(
-      child: Text(
-        'Shorts Coming Soon',
-        style: TextStyle(
-          fontSize: 16,
-          color: Color(0xFF757575),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPlaylistsList() {
-    return const Center(
-      child: Text(
-        'Playlists Coming Soon',
-        style: TextStyle(
-          fontSize: 16,
-          color: Color(0xFF757575),
-        ),
       ),
     );
   }
 }
 
+/// ------------------ Videos Tab with Pagination ------------------
+class VideosTab extends StatefulWidget {
+  @override
+  _VideosTabState createState() => _VideosTabState();
+}
+
+class _VideosTabState extends State<VideosTab> {
+  final String apiKey = 'AIzaSyCYVOwEI7KLLep1XVrJU4-k7Veih6S2q8w';
+  final String channelId = 'UCuNhM6zzJUHxvcqiAPsqWHQ';
+  List<Map<String, String>> videos = [];
+  bool isLoading = true;
+  bool isLoadingMore = false;
+  String? nextPageToken;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchVideos();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 300 &&
+          !isLoadingMore &&
+          nextPageToken != null) {
+        fetchVideos(loadMore: true);
+      }
+    });
+  }
+
+  Future<void> fetchVideos({bool loadMore = false}) async {
+    if (loadMore) {
+      setState(() => isLoadingMore = true);
+    } else {
+      setState(() => isLoading = true);
+    }
+
+    final url = Uri.parse(
+        'https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=$channelId&maxResults=20&order=date&type=video&key=$apiKey${nextPageToken != null ? "&pageToken=$nextPageToken" : ""}');
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final List<Map<String, String>> fetchedVideos = [];
+
+        for (var item in data['items']) {
+          fetchedVideos.add({
+            'videoId': item['id']['videoId'],
+            'title': item['snippet']['title'],
+          });
+        }
+
+        setState(() {
+          if (loadMore) {
+            videos.addAll(fetchedVideos);
+            isLoadingMore = false;
+          } else {
+            videos = fetchedVideos;
+            isLoading = false;
+          }
+          nextPageToken = data['nextPageToken'];
+        });
+      } else {
+        throw Exception('Failed to fetch videos');
+      }
+    } catch (e) {
+      print('Error: $e');
+      setState(() {
+        isLoading = false;
+        isLoadingMore = false;
+      });
+    }
+  }
+
+  void openVideo(String videoId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPlayerScreen(videoId: videoId),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    return ListView.builder(
+      controller: _scrollController,
+      itemCount: videos.length + (isLoadingMore ? 1 : 0),
+      itemBuilder: (context, index) {
+        if (index < videos.length) {
+          final video = videos[index];
+          return ListTile(
+            leading: Image.network(
+              YoutubePlayer.getThumbnail(videoId: video['videoId']!),
+              width: 120,
+              fit: BoxFit.cover,
+            ),
+            title: Text(video['title']!),
+            onTap: () => openVideo(video['videoId']!),
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+      },
+    );
+  }
+}
+
+/// ------------------ Placeholder Tabs ------------------
+class AudiosTab extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text('Audios content goes here'));
+  }
+}
+
+class BooksTab extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text('Books content goes here'));
+  }
+}
+
+class HablullahTab extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text('Hablullah content goes here'));
+  }
+}
+
+/// ------------------ Video Player Screen ------------------
+class VideoPlayerScreen extends StatefulWidget {
+  final String videoId;
+
+  const VideoPlayerScreen({Key? key, required this.videoId}) : super(key: key);
+
+  @override
+  _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
+}
+
+class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
+  late YoutubePlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = YoutubePlayerController(
+      initialVideoId: widget.videoId,
+      flags: YoutubePlayerFlags(
+        autoPlay: true,
+        mute: false,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Video Player')),
+      body: YoutubePlayer(
+        controller: _controller,
+        showVideoProgressIndicator: true,
+      ),
+    );
+  }
+}

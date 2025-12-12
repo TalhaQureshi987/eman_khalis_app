@@ -1,8 +1,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Add this line for internet permission -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+
+
     <application
         android:label="eman_khalis_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <!-- Add this for YouTube player -->
+        <activity
+            android:name="com.pichillilorenzo.flutter_inappwebview.InAppBrowserActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+
+        <!-- Other activities -->
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
