@@ -31,7 +31,7 @@ class _VideoListScreenState extends State<VideoListScreen>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text('Eman e Khalis ',style: TextStyle(color: Colors.black),),
+        title: Text('Eman e Khalis',style: TextStyle(color: Colors.black),),
         actions: [
           IconButton(onPressed: (){}, icon: Icon(Icons.search,color: Colors.black,))
         ],
